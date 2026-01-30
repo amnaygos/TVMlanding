@@ -233,7 +233,7 @@ function HeroSection() {
               full_name: formData.fullName,
               phone_number: formData.phone,
               brand_id: brandId,
-              website_source: 'thevenuemen.com',
+              website_source: typeof window !== 'undefined' ? window.location.hostname : 'thevenuemen.com',
               form_code: 'TVM_HERO_V1_STEP1',
               status: 'New',
               metadata: {
@@ -341,7 +341,7 @@ function HeroSection() {
                 full_name: formData.fullName,
                 phone_number: formData.phone,
                 brand_id: brandId,
-                website_source: 'thevenuemen.com',
+                website_source: typeof window !== 'undefined' ? window.location.hostname : 'thevenuemen.com',
                 form_code: 'booking',
                 status: 'New',
                 metadata: {
