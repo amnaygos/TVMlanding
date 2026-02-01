@@ -5,19 +5,24 @@
 @layer base {
   :root {
     /* Venue Men Brand Colors */
-    --background: 0 0% 10.6%; /* #1a1a1b - Neutral Black */
-    --foreground: 36 20% 78%; /* #bbaf96 - Primary Beige */
+    --background: 0 0% 10.6%;
+    /* #1a1a1b - Neutral Black */
+    --foreground: 36 20% 78%;
+    /* #bbaf96 - Primary Beige */
     --card: 0 0% 12%;
     --card-foreground: 36 20% 78%;
     --popover: 0 0% 10.6%;
     --popover-foreground: 36 20% 78%;
-    --primary: 36 20% 78%; /* Beige */
+    --primary: 36 20% 78%;
+    /* Beige */
     --primary-foreground: 0 0% 10.6%;
-    --secondary: 30 10% 39%; /* #6d6259 - Ash Beige */
+    --secondary: 30 10% 39%;
+    /* #6d6259 - Ash Beige */
     --secondary-foreground: 36 20% 78%;
     --muted: 30 10% 25%;
     --muted-foreground: 36 15% 60%;
-    --accent: 30 25% 45%; /* Copper accent */
+    --accent: 30 25% 45%;
+    /* Copper accent */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -25,14 +30,19 @@
     --input: 30 10% 20%;
     --ring: 36 20% 78%;
     --radius: 0.5rem;
-    
+
     /* Brand-specific colors */
-    --beige: 36 20% 78%; /* #bbaf96 */
-    --ash-beige: 30 10% 39%; /* #6d6259 */
-    --neutral-black: 0 0% 10.6%; /* #1a1a1b */
+    --beige: 36 20% 78%;
+    /* #bbaf96 */
+    --ash-beige: 30 10% 39%;
+    /* #6d6259 */
+    --neutral-black: 0 0% 10.6%;
+    /* #1a1a1b */
     --copper: 30 35% 50%;
-    --copper-dark: 30 45% 31%; /* #754e29 */
-    --copper-light: 30 35% 57%; /* #b78d6d */
+    --copper-dark: 30 45% 31%;
+    /* #754e29 */
+    --copper-light: 30 35% 57%;
+    /* #b78d6d */
   }
 }
 
@@ -40,33 +50,43 @@
   * {
     @apply border-border;
   }
-  
+
   html {
     scroll-behavior: smooth;
+    font-family: var(--font-tajawal), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Tajawal', sans-serif;
+    font-family: var(--font-tajawal), sans-serif;
     font-weight: 400;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Tajawal', sans-serif;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-tajawal), sans-serif;
     font-weight: 300;
   }
 }
 
 @layer utilities {
+
   /* Custom gradient for brand */
   .gradient-copper {
     background: linear-gradient(135deg, #754e29 0%, #b78d6d 100%);
   }
-  
+
   .gradient-dark {
     background: linear-gradient(180deg, rgba(26, 26, 27, 0) 0%, rgba(26, 26, 27, 1) 100%);
   }
-  
+
   /* Text gradient */
   .text-gradient-copper {
     background: linear-gradient(135deg, #bbaf96 0%, #b78d6d 100%);
@@ -74,28 +94,28 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   /* Glass effect */
   .glass {
     background: rgba(26, 26, 27, 0.8);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
-  
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: #1a1a1b;
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: #6d6259;
     border-radius: 4px;
   }
-  
+
   ::-webkit-scrollbar-thumb:hover {
     background: #bbaf96;
   }
@@ -135,7 +155,7 @@
 
   .rdp-month_caption {
     color: #bbaf96;
-    font-family: 'Tajawal', sans-serif;
+    font-family: var(--font-tajawal), sans-serif;
     font-weight: 300;
     font-size: 1.1rem;
     margin-bottom: 1rem;

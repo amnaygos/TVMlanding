@@ -270,10 +270,10 @@ function HeroSection() {
               content_name: 'Hero Form Step 1',
               status: 'Submitted'
             });
-          }
-
-          // 2. Dynamic Image Pixel Fallback (Bulletproof for SPAs)
-          if (typeof document !== 'undefined') {
+          } else if (typeof document !== 'undefined') {
+            // 2. Dynamic Image Pixel Fallback (Bulletproof for SPAs)
+            // Only fallback if the JS pixel didn't fire
+            // (Re-applied fix)
             const img = document.createElement('img');
             img.src = `https://www.facebook.com/tr?id=${pixelId}&ev=Lead&noscript=1&ts=${Date.now()}`;
             img.width = 1;
@@ -545,6 +545,7 @@ function HeroSection() {
                               mode="single"
                               selected={formData.bookingDate}
                               onSelect={(date) => setFormData({ ...formData, bookingDate: date })}
+                              disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
                               initialFocus
                               locale={ar}
                             />
@@ -564,11 +565,41 @@ function HeroSection() {
                         <SelectTrigger className="bg-white/5 border-beige/20 text-beige h-12 text-right">
                           <SelectValue placeholder="اختر وقت الحجز" />
                         </SelectTrigger>
-                        <SelectContent className="bg-neutral-black border-beige/20">
-                          <SelectItem value="morning">صباحاً (6:00 - 12:00)</SelectItem>
-                          <SelectItem value="afternoon">ظهراً (12:00 - 16:00)</SelectItem>
-                          <SelectItem value="evening">مساءً (16:00 - 22:00)</SelectItem>
-                          <SelectItem value="night">ليلاً (22:00 - 24:00)</SelectItem>
+                        <SelectContent className="bg-neutral-black border-beige/20 text-beige">
+                          {/* Grid Layout for Time Selection */}
+                          <div className="p-2 grid grid-cols-4 gap-2 w-[280px]">
+                            {Array.from({ length: 24 }).map((_, i) => {
+                              const hour = i.toString().padStart(2, '0');
+                              const label = `${hour}:00`;
+
+                              // Timezone Logic (Qatar)
+                              let isDisabled = false;
+                              if (formData.bookingDate) {
+                                const qatarTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Qatar" });
+                                const qatarDate = new Date(qatarTime);
+                                const selectedDateStr = format(formData.bookingDate, 'yyyy-MM-dd');
+                                const currentDateStr = format(qatarDate, 'yyyy-MM-dd');
+
+                                if (selectedDateStr === currentDateStr) {
+                                  if (i <= qatarDate.getHours()) {
+                                    isDisabled = true;
+                                  }
+                                }
+                              }
+
+                              return (
+                                <SelectItem
+                                  key={hour}
+                                  value={label}
+                                  disabled={isDisabled}
+                                  className={`justify-center cursor-pointer text-center text-sm py-2 rounded-md transition-colors ${formData.bookingTime === label ? "bg-beige text-neutral-black" : "hover:bg-white/10"
+                                    } ${isDisabled ? "opacity-30 cursor-not-allowed" : ""}`}
+                                >
+                                  {label}
+                                </SelectItem>
+                              );
+                            })}
+                          </div>
                         </SelectContent>
                       </Select>
                     </div>
@@ -637,6 +668,119 @@ function HeroSection() {
           </Button>
         </DialogContent>
       </Dialog>
+    </section>
+  );
+}
+
+// Offer Section
+function OfferSection() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const targetDate = new Date('2026-02-10T00:00:00');
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const difference = targetDate.getTime() - now.getTime();
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        });
+      } else {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollToBooking = () => {
+    const element = document.getElementById('booking');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <section className="py-20 relative overflow-hidden bg-neutral-black">
+      {/* Background Animated Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-copper-dark/20 via-neutral-black to-copper-dark/20 animate-pulse opacity-50" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="bg-gradient-to-br from-white/10 to-transparent border border-copper/30 rounded-none p-8 md:p-12 text-center backdrop-blur-md overflow-hidden relative">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-copper/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-beige/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-5xl font-light text-beige mb-6">
+              عرض <span className="text-gradient-copper font-medium">اليوم الرياضي</span>
+            </h2>
+            <p className="text-beige/80 text-lg md:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
+              اشترك الان بعرض اليوم الرياضي،
+              <br className="hidden md:block" />
+              اشترك بأي عضوية وأحصل على <span className="text-copper">الثانية بنفس التكلفة لصديقك</span>.
+              <br />
+              مع أول باقة تدريب مجانية
+            </p>
+          </motion.div>
+
+          {/* Countdown Timer */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-10">
+            {[
+              { label: 'يوم', value: timeLeft.days },
+              { label: 'ساعة', value: timeLeft.hours },
+              { label: 'دقيقة', value: timeLeft.minutes },
+              { label: 'ثانية', value: timeLeft.seconds },
+            ].map((item, index) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="bg-neutral-black/50 border border-beige/10 p-4 rounded-none"
+              >
+                <div className="text-3xl md:text-4xl font-light text-beige mb-1 font-mono">
+                  {item.value.toString().padStart(2, '0')}
+                </div>
+                <div className="text-beige/50 text-sm">{item.label}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button
+              onClick={scrollToBooking}
+              variant="luxury"
+              className="px-10 py-6 text-xl shadow-glow animate-pulse"
+            >
+              اشترك الآن
+            </Button>
+          </motion.div>
+
+          <p className="text-beige/40 text-xs mt-6">
+            ينتهي العرض في 10 فبراير 2026
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
@@ -964,6 +1108,7 @@ export default function Home() {
       <Navigation />
       <main>
         <HeroSection />
+        <OfferSection />
         <FeaturesSection />
         <FacilitiesSection />
         <AboutSection />

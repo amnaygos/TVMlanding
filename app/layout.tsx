@@ -16,14 +16,17 @@ export const metadata: Metadata = {
   description: "فينيو هو نادي الرجال الصحي الأكثر تميزاً في قطر، يقدم تجربة لياقة عالمية المستوى مع أحدث المرافق والمدربين الشخصيين",
 };
 
+import GoogleTagManager from "@/components/GoogleTagManager";
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <body className={`${tajawal.variable} font-sans antialiased bg-background text-foreground`} suppressHydrationWarning>
+    <html lang="ar" dir="rtl" suppressHydrationWarning className={tajawal.variable}>
+      <body className="font-sans antialiased bg-background text-foreground" suppressHydrationWarning>
+        <GoogleTagManager />
         <FacebookPixel />
         <GoogleAnalytics />
         {children}
